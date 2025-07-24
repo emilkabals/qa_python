@@ -2,11 +2,7 @@ import pytest
 from main import BooksCollector
 
 class TestBooksCollector:
-    #Фикстура collector - создает новый экземпляр класса для каждого теста
-    @pytest.fixture
-    def collector(self):
-        return BooksCollector()
-
+    
     # Тесты для add_new_book 
     # Проверяем корректность добавления новых книг с разными названиями
     @pytest.mark.parametrize('name, expected', [
@@ -29,7 +25,20 @@ class TestBooksCollector:
         collector.add_new_book('1984')
         collector.set_book_genre('1984', 'Несуществующий жанр')
         assert collector.get_book_genre('1984') == ''
-
+    
+    # Тест только для add_new_book
+    def test_add_new_book(self, collector):
+        collector.add_new_book('Мастер и Маргарита')
+        assert 'Мастер и Маргарита' in collector.books_genre  # Прямой доступ к словарю
+    # Тест только для get_book_genre
+    def test_get_book_genre(self, collector):
+        collector.books_genre = {'Убийство в Восточном экспрессе': 'Детективы'}
+        assert collector.get_book_genre('Убийство в Восточном экспрессе') == 'Детективы'
+    # Проверяем, что set_book_genre устанавливает жанр при использовании книги из books_genre и жанра из genre
+    def test_set_book_genre_valid_genre_is_set(self, collector):
+        collector.add_new_book('Десять негритят')
+        collector.set_book_genre('Десять негритят', 'Детективы')
+        assert collector.books_genre['Десять негритят'] == 'Детективы'
     # Проверяем что get_books_with_specific_genre возвращает книги определенного жанра
     # Запрашиваем книги определенного жанра ('Фантастика')
     def test_get_books_with_specific_genre(self, collector):
@@ -80,4 +89,6 @@ class TestBooksCollector:
         collector.add_new_book('Убийство в Восточном экспрессе')
         collector.set_book_genre('Убийство в Восточном экспрессе', 'Детективы')
         assert collector.get_book_genre('Убийство в Восточном экспрессе') == 'Детективы'
+    
+    
         
