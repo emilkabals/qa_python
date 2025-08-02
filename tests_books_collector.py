@@ -14,20 +14,21 @@ class TestBooksCollector:
     def test_add_new_book(self, collector, name, expected):
         collector.add_new_book(name)
         assert (name in collector.get_books_genre()) == expected
-
-    # # Тестирование метода set_book_genre() - валидные случаи
-    def test_set_book_genre_valid(self, collector):
-        collector.add_new_book('Преступление и наказание')
-        collector.set_book_genre('Преступление и наказание', 'Детективы')
-        assert collector.get_book_genre('Преступление и наказание') == 'Детективы'
+    # Тестирование добавления книг
+    def test_get_books_genre_returns_correct_dict(self, collector):
+        collector.add_new_book('Мастер и Маргарита')
+        collector.add_new_book('Онегин')
+        collector.set_book_genre('Мастер и Маргарита', 'Драма')
+        expected = {'Мастер и Маргарита': 'Драма', 'Онегин': ''}
+        assert collector.get_books_genre() == expected
     # Тестирование метода set_book_genre() - невалидные случаи
     def test_set_book_genre_invalid(self, collector):
         collector.add_new_book('1984')
         collector.set_book_genre('1984', 'Несуществующий жанр')
         assert collector.get_book_genre('1984') == ''
     
-    # Тест только для add_new_book
-    def test_add_new_book(self, collector):
+    # Тест только для test_book_addition_success
+    def test_book_addition_success(self, collector):
         collector.add_new_book('Мастер и Маргарита')
         assert 'Мастер и Маргарита' in collector.books_genre  # Прямой доступ к словарю
     # Тест только для get_book_genre
